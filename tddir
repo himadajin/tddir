@@ -10,16 +10,13 @@ usage() {
 
 completion_zsh() {
     cat <<'EOF'
-#compdef tddir
-
 _tddir() {
     _arguments \
         '-p[Use custom base directory]:prefix:_files -/' \
         '-c[Output completion script]:shell:(zsh)' \
         '-h[Show this help]'
 }
-
-_tddir "$@"
+compdef _tddir tddir
 EOF
 }
 
