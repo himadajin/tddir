@@ -2,8 +2,9 @@
 set -eu
 
 usage() {
-    echo "Usage: tddir [-p <prefix>] [-c zsh] [-h]" >&2
+    echo "Usage: tddir [-p <prefix>] [-l] [-c zsh] [-h]" >&2
     echo "  -p <prefix>  Use <prefix> as the base directory (default: ~/works)" >&2
+    echo "  -l           Use the current directory as the base directory" >&2
     echo "  -c <shell>   Output completion script (supported: zsh)" >&2
     echo "  -h           Show this help" >&2
 }
@@ -13,6 +14,7 @@ completion_zsh() {
 _tddir() {
     _arguments \
         '-p[Use custom base directory]:prefix:_files -/' \
+        '-l[Use the current directory as the base directory]' \
         '-c[Output completion script]:shell:(zsh)' \
         '-h[Show this help]'
 }
@@ -22,9 +24,10 @@ EOF
 
 PREFIX="${HOME}/works"
 
-while getopts "p:c:h" opt; do
+while getopts "p:lc:h" opt; do
     case "$opt" in
         p) PREFIX="$OPTARG" ;;
+        l) PREFIX="$(pwd)" ;;
         c) case "$OPTARG" in
                zsh) completion_zsh; exit 0 ;;
                *)   echo "Unsupported shell: '$OPTARG'. Supported: zsh" >&2; exit 1 ;;
